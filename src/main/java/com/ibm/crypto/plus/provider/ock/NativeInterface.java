@@ -365,7 +365,7 @@ final class NativeInterface {
                 String exceptionMessage = "Dependent library was loaded from an external location";
 
                 //if (debug != null) {
-                    exceptionMessage = "Dependent library was loaded from " + ockInstallPath;
+                exceptionMessage = "Dependent library was loaded from " + ockInstallPath;
                 //}
 
                 throw new ProviderException(exceptionMessage);
