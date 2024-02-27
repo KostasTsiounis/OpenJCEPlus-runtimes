@@ -35,6 +35,6 @@ IF NOT DEFINED GSKIT_64_HOME (
 cd src/main/native
 
 @call nmake -nologo -f jgskit.win64.mak clean
-@call nmake -nologo -f jgskit.win64.mak 
+@call nmake -nologo -f jgskit.win64.mak all
 
 @endlocal
