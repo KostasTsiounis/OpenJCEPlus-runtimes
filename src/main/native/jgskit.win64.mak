@@ -54,7 +54,7 @@ BuildDate.obj: FORCE
 FORCE:
 
 .c.obj:
-	-cl -nologo -DWINDOWS $(DEBUG_FLAGS) -c -I"$(GSKIT_HOME)\inc" -I"$(JAVA_HOME)\include" -I"$(JAVA_HOME)\include\win32" $*.c
+	-cl -nologo -DWINDOWS $(DEBUG_FLAGS) -c -I"$(GSKIT_HOME)/inc" -I"$(JAVA_HOME)\include" -I"$(JAVA_HOME)\include\win32" $*.c
 
 $(JGSKIT_RC_OBJ) : $(JGSKIT_RC_SRC)
 	-@rc $(BUILD_CFLAGS) -Fo$@ $(JGSKIT_RC_SRC)
