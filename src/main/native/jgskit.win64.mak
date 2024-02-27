@@ -23,7 +23,7 @@ JAVACLASSDIR = $(TOPDIR)\target\classes
 #DEBUG_DATA =  -DDEBUG_DH_DATA -DDEBUG_DSA_DATA -DDEBUG_EC_DATA -DDEBUG_GCM_DATA -DDEBUG_CCM_DATA -DDEBUG_HMAC_DATA -DDEBUG_CIPHER_DATA -DDEBUG_RSA_DATA -DDEBUG_SIGNATURE_DATA -DDEBUG_SIGNATURE_DSANONE_DATA -DDEBUG_SIGNATURE_RSASSL_DATA -DDEBUG_HKDF_DATA -DDEBUG_RSAPSS_DATA -DDEBUG_SIGNATURE_EDDSA_DATA
 #DEBUG_FLAGS = -DDEBUG $(DEBUG_DETAIL)  $(DEBUG_DATA)
 
-OBJS= "$(HOSTOUT)\BasicRandom.obj" "$(HOSTOUT)\BuildDate.obj" $(HOSTOUT)\CCM.obj $(HOSTOUT)\Digest.obj $(HOSTOUT)\DHKey.obj $(HOSTOUT)\DSAKey.obj $(HOSTOUT)\ECKey.obj $(HOSTOUT)\ExtendedRandom.obj $(HOSTOUT)\GCM.obj $(HOSTOUT)\HKDF.obj $(HOSTOUT)\HMAC.obj $(HOSTOUT)\PKey.obj $(HOSTOUT)\Poly1305Cipher.obj $(HOSTOUT)\RSA.obj $(HOSTOUT)\RSAKey.obj $(HOSTOUT)\RsaPss.obj $(HOSTOUT)\Signature.obj $(HOSTOUT)\SignatureDSANONE.obj $(HOSTOUT)\SignatureRSASSL.obj $(HOSTOUT)\StaticStub.obj $(HOSTOUT)\SymmetricCipher.obj $(HOSTOUT)\Utils.obj $(HOSTOUT)\SignatureEdDSA.obj
+OBJS = $(HOSTOUT)\BasicRandom.obj $(HOSTOUT)\BuildDate.obj $(HOSTOUT)\CCM.obj $(HOSTOUT)\Digest.obj $(HOSTOUT)\DHKey.obj $(HOSTOUT)\DSAKey.obj $(HOSTOUT)\ECKey.obj $(HOSTOUT)\ExtendedRandom.obj $(HOSTOUT)\GCM.obj $(HOSTOUT)\HKDF.obj $(HOSTOUT)\HMAC.obj $(HOSTOUT)\PKey.obj $(HOSTOUT)\Poly1305Cipher.obj $(HOSTOUT)\RSA.obj $(HOSTOUT)\RSAKey.obj $(HOSTOUT)\RsaPss.obj $(HOSTOUT)\Signature.obj $(HOSTOUT)\SignatureDSANONE.obj $(HOSTOUT)\SignatureRSASSL.obj $(HOSTOUT)\StaticStub.obj $(HOSTOUT)\SymmetricCipher.obj $(HOSTOUT)\Utils.obj $(HOSTOUT)\SignatureEdDSA.obj
 
 JGSKIT_RC_SRC = jgskit_resource.rc
 JGSKIT_RC_OBJ = $(HOSTOUT)\jgskit_resource.res
