@@ -25,12 +25,12 @@ IF NOT DEFINED GSKIT_64_HOME (
 :: action being used calls the equivilant of the vcvars64.bat file prior to 
 :: this script being executed.
 
-:: IF NOT DEFINED VCVARS_64_SCRIPT (
-:: 	echo "VCVARS_64_SCRIPT must be set"
-::	goto :eof
-::)
+IF NOT DEFINED VCVARS_64_SCRIPT (
+	echo "VCVARS_64_SCRIPT must be set"
+	goto :eof
+)
 
-:: @call "%VCVARS_64_SCRIPT%"
+@call "%VCVARS_64_SCRIPT%"
 
 cd src/main/native
 
