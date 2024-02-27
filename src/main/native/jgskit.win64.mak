@@ -23,13 +23,13 @@ JAVACLASSDIR = $(TOPDIR)\target\classes
 #DEBUG_DATA =  -DDEBUG_DH_DATA -DDEBUG_DSA_DATA -DDEBUG_EC_DATA -DDEBUG_GCM_DATA -DDEBUG_CCM_DATA -DDEBUG_HMAC_DATA -DDEBUG_CIPHER_DATA -DDEBUG_RSA_DATA -DDEBUG_SIGNATURE_DATA -DDEBUG_SIGNATURE_DSANONE_DATA -DDEBUG_SIGNATURE_RSASSL_DATA -DDEBUG_HKDF_DATA -DDEBUG_RSAPSS_DATA -DDEBUG_SIGNATURE_EDDSA_DATA
 #DEBUG_FLAGS = -DDEBUG $(DEBUG_DETAIL)  $(DEBUG_DATA)
 
-OBJS = $(HOSTOUT)\BasicRandom.obj $(HOSTOUT)\BuildDate.obj $(HOSTOUT)\CCM.obj $(HOSTOUT)\Digest.obj $(HOSTOUT)\DHKey.obj $(HOSTOUT)\DSAKey.obj $(HOSTOUT)\ECKey.obj $(HOSTOUT)\ExtendedRandom.obj $(HOSTOUT)\GCM.obj $(HOSTOUT)\HKDF.obj $(HOSTOUT)\HMAC.obj $(HOSTOUT)\PKey.obj $(HOSTOUT)\Poly1305Cipher.obj $(HOSTOUT)\RSA.obj $(HOSTOUT)\RSAKey.obj $(HOSTOUT)\RsaPss.obj $(HOSTOUT)\Signature.obj $(HOSTOUT)\SignatureDSANONE.obj $(HOSTOUT)\SignatureRSASSL.obj $(HOSTOUT)\StaticStub.obj $(HOSTOUT)\SymmetricCipher.obj $(HOSTOUT)\Utils.obj $(HOSTOUT)\SignatureEdDSA.obj
+OBJS = BasicRandom.obj BuildDate.obj CCM.obj Digest.obj DHKey.obj DSAKey.obj ECKey.obj ExtendedRandom.obj GCM.obj HKDF.obj HMAC.obj PKey.obj Poly1305Cipher.obj RSA.obj RSAKey.obj RsaPss.obj Signature.obj SignatureDSANONE.obj SignatureRSASSL.obj StaticStub.obj SymmetricCipher.obj Utils.obj SignatureEdDSA.obj
 
 JGSKIT_RC_SRC = jgskit_resource.rc
-JGSKIT_RC_OBJ = $(HOSTOUT)\jgskit_resource.res
+JGSKIT_RC_OBJ = jgskit_resource.res
 
 
-TARGET = $(HOSTOUT)\libjgskit_64.dll
+TARGET = libjgskit_64.dll
 
 all:  dircreate javah $(TARGET)
 
@@ -49,11 +49,11 @@ $(TARGET): $(OBJS) $(JGSKIT_RC_OBJ)
 
 # Force BuildDate to be recompiled every time
 #
-$(HOSTOUT)\BuildDate.obj: FORCE
+BuildDate.obj: FORCE
 
 FORCE:
 
-$(HOSTOUT)\*.obj: *.c
+*.obj: *.c
 	-cl -nologo -DWINDOWS $(DEBUG_FLAGS) -c -I"$(GSKIT_HOME)\inc" -I"$(JAVA_HOME)\include" -I"$(JAVA_HOME)\include\win32" $< -Fo$@
 
 $(JGSKIT_RC_OBJ) : $(JGSKIT_RC_SRC)
@@ -61,8 +61,8 @@ $(JGSKIT_RC_OBJ) : $(JGSKIT_RC_SRC)
 
 
 clean:
-	-@del $(HOSTOUT)\*.obj
-	-@del $(HOSTOUT)\*.exp
-	-@del $(HOSTOUT)\*.lib
-	-@del $(HOSTOUT)\*.dll
-	-@del $(HOSTOUT)\*.res
+	-@del *.obj
+	-@del *.exp
+	-@del *.lib
+	-@del *.dll
+	-@del *.res
