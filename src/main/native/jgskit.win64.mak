@@ -31,7 +31,7 @@ JGSKIT_RC_OBJ = jgskit_resource.res
 
 TARGET = libjgskit_64.dll
 
-all:  dircreate javah $(TARGET)
+all:  dircreate javah $(TARGET) copy
 
 dircreate:
 	-@mkdir -p $(HOSTOUT) 2>nul
@@ -47,6 +47,11 @@ javah: dircreate
 $(TARGET): $(OBJS) $(JGSKIT_RC_OBJ)
 	-link -dll -out:$@ $(OBJS) $(JGSKIT_RC_OBJ) -LIBPATH:"$(GSKIT_HOME)\lib" jgsk8iccs_64.lib
 
+copy:
+	-@cp *.obj $(HOSTOUT)
+	-@cp jgskit_resource.res $(HOSTOUT)
+	-@cp libjgskit_64.dll $(HOSTOUT)
+ 
 # Force BuildDate to be recompiled every time
 #
 BuildDate.obj: FORCE
