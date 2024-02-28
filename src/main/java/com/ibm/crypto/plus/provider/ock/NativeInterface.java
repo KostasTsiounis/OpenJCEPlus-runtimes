@@ -152,7 +152,7 @@ final class NativeInterface {
 
         boolean jgskitLibraryPreloaded = loadIfExists(loadFile);
         if (jgskitLibraryPreloaded == false) {
-            String exceptionMessage = "Could not load dependent jgskit library";
+            String exceptionMessage = "Could not load dependent jgskit library from " + loadFile.getAbsolutePath();
 
             if (debug != null) {
                 // Do not use loadFile or libraryName in message in an effort to hide OCK usage
