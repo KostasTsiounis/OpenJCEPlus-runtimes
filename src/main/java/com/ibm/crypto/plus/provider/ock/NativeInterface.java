@@ -152,6 +152,7 @@ final class NativeInterface {
 
         boolean jgskitLibraryPreloaded = loadIfExists(loadFile);
         if (jgskitLibraryPreloaded == false) {
+            System.out.println("Dependent library was loaded from " + jgskitPath);
             String exceptionMessage = "Could not load dependent jgskit library";
 
             if (debug != null) {
@@ -188,7 +189,6 @@ final class NativeInterface {
 
         boolean jgskitLibraryPreloaded = loadIfExists(loadFile);
         if (jgskitLibraryPreloaded == false) {
-            System.out.println("Dependent library was loaded from " + jgskitPath);
             String exceptionMessage = "Could not load dependent jgskit library";
 
             if (debug != null) {
