@@ -332,6 +332,7 @@ final class NativeInterface {
                 }
                 return true;
             } catch (Throwable t) {
+                t.printStackTrace();
                 if (debugLoad) {
                     System.out.println("Failed to load : " + libraryName);
                 }
