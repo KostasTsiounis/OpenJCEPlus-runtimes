@@ -321,6 +321,7 @@ final class NativeInterface {
         String libraryName = libraryFile.getAbsolutePath();
 
         if (libraryFile.exists()) {
+            System.out.println("Library file exists.");
             // Need a try/catch block in case the library has already been
             // loaded by another ClassLoader
             //
@@ -336,6 +337,7 @@ final class NativeInterface {
                 }
             }
         } else {
+            System.out.println("Library file doesn't exist.");
             if (debugLoad) {
                 System.out.println("Skipping load of " + libraryName);
             }
