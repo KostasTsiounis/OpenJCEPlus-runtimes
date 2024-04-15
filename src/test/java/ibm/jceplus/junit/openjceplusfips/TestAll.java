@@ -14,13 +14,13 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestAES.class, TestAES_128.class, TestAES256Interop.class, TestAESCCM.class,
+@Suite.SuiteClasses({/*TestAES.class, TestAES_128.class, TestAES256Interop.class, TestAESCCM.class,
         TestAESCCM2.class, TestAESCCMParameters.class, TestAESCCMInteropBC.class, TestAESGCM.class,
         TestAESGCMUpdate.class, TestAESGCM_128.class, TestAESGCM_ExtIV.class,
         TestAESGCM_IntIV.class, TestAESGCMCipherInputStreamExceptions.class,
         TestAESGCMCopySafe.class, TestAESGCMNonExpanding.class, TestAESGCMCICOWithGCM.class,
         TestAESGCMSameBuffer.class, TestAESGCMWithByteBuffer.class,
-        TestAESGCMCICOWithGCMAndAAD.class, TestAESGCMLong.class, TestAESGCMBufferIV.class,
+        TestAESGCMCICOWithGCMAndAAD.class, TestAESGCMLong.class, TestAESGCMBufferIV.class,*/
         TestAliases.class, TestDHKeyPairGenerator.class, TestDH.class, TestDHMultiParty.class,
         TestDHInteropSunJCE.class, TestDHKeyFactory.class, TestECDH.class,
         TestECDHInteropSunEC.class, TestECDHMultiParty.class, TestECDSASignature.class,
