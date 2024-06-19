@@ -20,6 +20,7 @@ import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Arrays;
+
 import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -27,14 +28,17 @@ import javax.crypto.CipherSpi;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
+
 import com.ibm.crypto.plus.provider.ock.CCMCipher;
 import com.ibm.crypto.plus.provider.ock.OCKContext;
+import com.ibm.crypto.plus.provider.ock.OCKException;
 import com.ibm.misc.Debug;
+
 import ibm.security.internal.spec.CCMParameterSpec;
 
 
 
-public final class AESCCMCipher extends CipherSpi implements AESConstants, CCMConstants {
+public final class AESCCMCipher extends CipherSpi implements AESConstants, CCMConstants, CleanableObject {
 
     String debPrefix = "AESCCMCipher ";
 
@@ -114,6 +118,8 @@ public final class AESCCMCipher extends CipherSpi implements AESConstants, CCMCo
             throw provider.providerException("Failed to initialize cipher context", e);
         }
         buffer = new byte[AES_BLOCK_SIZE * 2];
+
+        OpenJCEPlusProvider.registerCleanable(this);
     }
 
 
@@ -738,23 +744,21 @@ public final class AESCCMCipher extends CipherSpi implements AESConstants, CCMCo
         return (encrypting) ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE;
     }
 
-
     @Override
-    protected synchronized void finalize() throws Throwable {
-        //final String methodName = "finalize";
-        // OCKDebug.Msg (debPrefix, methodName, "finalize called");
-        try {
-            if (ockContext != null) {
+    public void cleanup() {
+        if (ockContext != null) {
+            try {
                 CCMCipher.doCCM_cleanup(ockContext);
+            } catch (OCKException e) {
+                e.printStackTrace();
             }
-            if (Key != null) {
-                Arrays.fill(Key, (byte) 0x00);
-                Key = null;
-            }
-        } finally {
-            super.finalize();
+        }
+        if (Key != null) {
+            Arrays.fill(Key, (byte) 0x00);
+            Key = null;
         }
     }
+
 
 
     private void checkReinit() {
