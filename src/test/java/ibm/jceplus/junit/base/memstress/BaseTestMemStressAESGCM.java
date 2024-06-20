@@ -95,7 +95,7 @@ public class BaseTestMemStressAESGCM extends BaseTest {
 
 
         for (int i = 0; i < numTimes; i++) {
-            encryptDecrypt(cp);
+            encryptDecrypt("AES/GCM/NoPadding");
             currentTotalMemory = rt.totalMemory();
             currentFreeMemory = rt.freeMemory();
             currentUsedMemory = currentTotalMemory - currentFreeMemory;
