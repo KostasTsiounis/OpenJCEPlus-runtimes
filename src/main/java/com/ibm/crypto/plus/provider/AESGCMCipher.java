@@ -33,7 +33,7 @@ import com.ibm.crypto.plus.provider.ock.OCKContext;
 import com.ibm.crypto.plus.provider.ock.OCKException;
 
 
-public final class AESGCMCipher extends CipherSpi implements AESConstants, GCMConstants {
+public final class AESGCMCipher extends CipherSpi implements AESConstants, GCMConstants, CleanableObject {
 
     String debPrefix = "AESGCMCipher ";
 
@@ -149,6 +149,8 @@ public final class AESGCMCipher extends CipherSpi implements AESConstants, GCMCo
             throw provider.providerException("Failed to initialize cipher context", e);
         }
         buffer = new byte[AES_BLOCK_SIZE * 2];
+
+        OpenJCEPlusProvider.registerCleanable(this);
     }
 
 
@@ -1420,18 +1422,11 @@ public final class AESGCMCipher extends CipherSpi implements AESConstants, GCMCo
     }
 
     @Override
-    protected synchronized void finalize() throws Throwable {
-        //final String methodName = "finalize";
-        // OCKDebug.Msg (debPrefix, methodName, "finalize called");
-        try {
-
-            //JS00684 - Leave cleanup of internal variables to GCMCipher that caches them
-            if (Key != null) {
-                Arrays.fill(Key, (byte) 0x00);
-                Key = null;
-            }
-        } finally {
-            super.finalize();
+    public void cleanup() {
+        //JS00684 - Leave cleanup of internal variables to GCMCipher that caches them
+        if (Key != null) {
+            Arrays.fill(Key, (byte) 0x00);
+            Key = null;
         }
     }
 
