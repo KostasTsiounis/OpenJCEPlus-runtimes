@@ -218,10 +218,6 @@
                         <arg>-Xlint:all</arg> 
                         <arg>-Xlint:all</arg>
                         <arg>--add-exports </arg> 
-                        <arg>java.base/java.lang.ref=openjceplus</arg>
-                        <arg>--add-exports </arg> 
-                        <arg>java.base/jdk.internal.ref=openjceplus</arg>
-                        <arg>--add-exports </arg> 
                         <arg>java.base/sun.security.internal.spec=openjceplus</arg>
                         <arg>--add-exports </arg> 
                         <arg>java.base/sun.security.util=openjceplus</arg>
@@ -353,8 +349,6 @@
                     <argLine>
                       @{argLine}
                       --patch-module openjceplus="target${file.separator}classes${path.separator}target${file.separator}test-classes"
-                      --add-exports=java.base/java.lang.ref=openjceplus
-                      --add-exports=java.base/jdk.internal.ref=openjceplus
                       --add-exports=java.base/sun.security.internal.spec=openjceplus
                       --add-exports=java.base/sun.security.util=openjceplus
                       --add-exports=java.base/sun.security.internal.interfaces=openjceplus

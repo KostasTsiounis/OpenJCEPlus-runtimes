@@ -13,8 +13,6 @@ import java.security.ProviderException;
 
 import com.ibm.crypto.plus.provider.ock.OCKContext;
 
-import jdk.internal.ref.CleanerFactory;
-
 // Internal interface for OpenJCEPlus and OpenJCEPlus implementation classes.
 // Implemented as an abstract class rather than an interface so that 
 // methods can be package protected, as interfaces have only public methods.
@@ -32,7 +30,7 @@ public abstract class OpenJCEPlusProvider extends java.security.Provider {
     //    private static boolean verifiedSelfIntegrity = false;
     private static boolean verifiedSelfIntegrity = true;
 
-    private static final Cleaner cleaner = CleanerFactory.cleaner();
+    private static final Cleaner cleaner = Cleaner.cleaner();
 
     OpenJCEPlusProvider(String name, String info) {
         super(name, PROVIDER_VER, info);
