@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.ShortBufferException;
@@ -592,19 +593,23 @@ public final class SymmetricCipher implements CleanableObject{
     @Override
     public synchronized void cleanup() {
         //final String methodName = "finalize";
-        try {
-            //OCKDebug.Msg(debPrefix, methodName, "ockCipherId :" + ockCipherId);
-            if (!use_z_fast_command) {
-                if (ockCipherId != 0) {
+
+        //OCKDebug.Msg(debPrefix, methodName, "ockCipherId :" + ockCipherId);
+        if (!use_z_fast_command) {
+            if (ockCipherId != 0) {
+                try {
                     NativeInterface.CIPHER_delete(ockContext.getId(), ockCipherId);
                     ockCipherId = 0;
+                } catch (OCKException e) {
+                    e.printStackTrace();
                 }
+                
             }
-        } finally {
-            if (reinitKey != null) {
-                Arrays.fill(reinitKey, (byte) 0x00);
-                reinitKey = null;
-            }
+        }
+        
+        if (reinitKey != null) {
+            Arrays.fill(reinitKey, (byte) 0x00);
+            reinitKey = null;
         }
     }
 
