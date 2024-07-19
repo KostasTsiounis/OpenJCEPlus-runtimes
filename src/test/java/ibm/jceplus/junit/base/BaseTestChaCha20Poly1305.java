@@ -13,12 +13,17 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.Arrays;
+import java.util.Random;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import com.ibm.crypto.plus.provider.ChaCha20Constants;
 
 public class BaseTestChaCha20Poly1305 extends BaseTestCipher implements ChaCha20Constants {
@@ -76,6 +81,11 @@ public class BaseTestChaCha20Poly1305 extends BaseTestCipher implements ChaCha20
     //
     public BaseTestChaCha20Poly1305(String providerName) {
         super(providerName);
+
+        try {
+            warmup();
+        } catch (Exception e) {
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -989,6 +999,35 @@ public class BaseTestChaCha20Poly1305 extends BaseTestCipher implements ChaCha20
 
         } catch (Exception e) {
             fail("Got unexpected exception on encrypt/decrypt...");
+        }
+    }
+
+    static public void warmup() throws Exception {
+        System.out.println("Running warmup for BaseTestChaCha20Poly1305.");
+        byte[] iv;
+        byte[] data = "1234567812345678".getBytes();
+        byte[] out;
+        Random r;
+        try {
+            r = new Random(10);
+
+            KeyGenerator keyGen = KeyGenerator.getInstance(CHACHA20_ALGORITHM, "OpenJCEPlus");
+            SecretKey key = keyGen.generateKey();
+
+            for (int i = 0; i < 999999; i++) {
+                Cipher cipher = Cipher.getInstance(CHACHA20_POLY1305_ALGORITHM, "OpenJCEPlus");
+                out = new byte[4096];
+                iv = new byte[16];
+                r.nextBytes(iv);
+                AlgorithmParameterSpec iviv = new IvParameterSpec(iv);
+
+                cipher.init(Cipher.ENCRYPT_MODE, key, iviv);
+                for (long j = 0; j < 9; j++)
+                        cipher.update(data, 0, data.length, out);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 }
