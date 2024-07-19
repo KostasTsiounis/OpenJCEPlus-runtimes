@@ -9,6 +9,7 @@
 package com.ibm.crypto.plus.provider.ock;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
@@ -62,7 +63,7 @@ public final class Poly1305Cipher implements Poly1305Constants, CleanableObject 
         this.ockCipherId = NativeInterface.POLY1305CIPHER_create(ockContext.getId(), cipherName);
         this.padding = padding;
 
-        OpenJCEPlusProvider.registerCleanable(this);
+        OpenJCEPlusProvider.registerCleanableC(this, new WeakReference<CleanableObject>(this));
     }
 
     public synchronized void initCipherEncrypt(byte[] key, byte[] iv) throws OCKException {
@@ -383,6 +384,7 @@ public final class Poly1305Cipher implements Poly1305Constants, CleanableObject 
 
     @Override
     public synchronized void cleanup() {
+        System.out.println("Cleanup called on Poly1305Cipher instance.");
         if (ockCipherId != 0) {
             try {
                 NativeInterface.POLY1305CIPHER_delete(ockContext.getId(), ockCipherId);
