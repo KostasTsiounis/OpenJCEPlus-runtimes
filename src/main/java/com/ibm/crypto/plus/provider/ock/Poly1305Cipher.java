@@ -9,7 +9,6 @@
 package com.ibm.crypto.plus.provider.ock;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
