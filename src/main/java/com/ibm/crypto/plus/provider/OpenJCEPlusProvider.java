@@ -11,6 +11,7 @@ package com.ibm.crypto.plus.provider;
 import java.lang.ref.Cleaner;
 import java.lang.ref.WeakReference;
 import java.security.ProviderException;
+import java.util.concurrent.Executors;
 
 import com.ibm.crypto.plus.provider.ock.OCKContext;
 
@@ -31,7 +32,7 @@ public abstract class OpenJCEPlusProvider extends java.security.Provider {
     //    private static boolean verifiedSelfIntegrity = false;
     private static boolean verifiedSelfIntegrity = true;
 
-    private static final Cleaner cleaner = Cleaner.create();
+    private static final Cleaner cleaner = Cleaner.create(Executors.defaultThreadFactory());
 
     OpenJCEPlusProvider(String name, String info) {
         super(name, PROVIDER_VER, info);
