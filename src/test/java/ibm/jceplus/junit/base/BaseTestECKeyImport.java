@@ -102,27 +102,30 @@ public class BaseTestECKeyImport extends BaseTest {
     public void testECGenParamImportHardcoded() throws Exception {
 
         //final String methodName = "testECGenParamImportHardcoded";
+        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("EC", providerName);
 
+        keyPairGen.initialize(256);
+        KeyPair keyPair = keyPairGen.generateKeyPair();
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        // Recreate private key from encoding.
+        byte[] privKeyBytes = privateKey.getEncoded();
         KeyFactory keyFactory = KeyFactory.getInstance("EC", providerName);
-        // Get from private key that contains public as well.
-        byte[] privKeyBytes = "".getBytes();
-
-        
         EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privKeyBytes);
-        PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+        privateKey = keyFactory.generatePrivate(privateKeySpec);
 
-        byte[] publicKeyFromEncoded = ((InternalPrivateKey) privateKey).calculatePublicKey().getEncoded();
+        // Get public key bytes from private.
+        byte[] calculatedPublicKey = ((InternalPrivateKey) privateKey).calculatePublicKey().getEncoded();
 
-        // Get from private key that contains public as well.
-        byte[] privKeyBytes2 = "".getBytes();
+        // Get public key bytes from original public key.
+        byte[] publicKeyBytes = publicKey.getEncoded();
 
-        EncodedKeySpec privateKeySpec2 = new PKCS8EncodedKeySpec(privKeyBytes2);
-        PrivateKey privateKey2 = keyFactory.generatePrivate(privateKeySpec2);
-
-        byte[] publicKeyFromCalculation = ((InternalPrivateKey) privateKey2).calculatePublicKey().getEncoded();
-
-        // The original and new keys are the same
-        Assert.assertArrayEquals(publicKeyFromEncoded, publicKeyFromCalculation);
+        System.out.println("---- Comparing EC public key from KeyPair vs calculated from private key ----");
+        System.out.println("EC public key from Keypair: " + BaseUtils.bytesToHex(publicKeyBytes));
+        System.out.println("EC public key from calculatePublicKey(): " + BaseUtils.bytesToHex(calculatedPublicKey));
+        // The original and calculated public keys should be the same
+        Assert.assertArrayEquals(calculatedPublicKey, publicKeyBytes);
     }
 
     /**
