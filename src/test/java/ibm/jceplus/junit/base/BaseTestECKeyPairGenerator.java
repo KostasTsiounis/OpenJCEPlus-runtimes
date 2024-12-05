@@ -124,6 +124,7 @@ public class BaseTestECKeyPairGenerator extends BaseTest {
         System.out.println("---- Comparing EC public key from KeyPair vs calculated from private key ----");
         System.out.println("EC public key from Keypair: " + BaseUtils.bytesToHex(originalEncoded));
         System.out.println("EC public key from calculatePublicKey(): " + BaseUtils.bytesToHex(calculatedEncoded));
+        System.out.println("EC private: " + BaseUtils.bytesToHex(ecpr.getEncoded()));
         Assert.assertArrayEquals(originalEncoded, calculatedEncoded);
     }
 

@@ -23,6 +23,8 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import org.junit.Assert;
+import sun.security.util.InternalPrivateKey;
 
 public class BaseTestECKeyImport extends BaseTest {
 
@@ -90,6 +92,37 @@ public class BaseTestECKeyImport extends BaseTest {
         assertTrue(same);
         same = publicKey.equals(publicKey2);
         assertTrue(same);
+    }
+
+    /**
+     * Import a keypair using harcoded encoded values.
+     *
+     * @throws Exception
+     */
+    public void testECGenParamImportHardcoded() throws Exception {
+
+        //final String methodName = "testECGenParamImportHardcoded";
+
+        KeyFactory keyFactory = KeyFactory.getInstance("EC", providerName);
+        // Get from private key that contains public as well.
+        byte[] privKeyBytes = "".getBytes();
+
+        
+        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privKeyBytes);
+        PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+        byte[] publicKeyFromEncoded = ((InternalPrivateKey) privateKey).calculatePublicKey().getEncoded();
+
+        // Get from private key that contains public as well.
+        byte[] privKeyBytes2 = "".getBytes();
+
+        EncodedKeySpec privateKeySpec2 = new PKCS8EncodedKeySpec(privKeyBytes2);
+        PrivateKey privateKey2 = keyFactory.generatePrivate(privateKeySpec2);
+
+        byte[] publicKeyFromCalculation = ((InternalPrivateKey) privateKey2).calculatePublicKey().getEncoded();
+
+        // The original and new keys are the same
+        Assert.assertArrayEquals(publicKeyFromEncoded, publicKeyFromCalculation);
     }
 
     /**
