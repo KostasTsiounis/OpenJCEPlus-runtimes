@@ -122,6 +122,7 @@ public class BaseTestECKeyImport extends BaseTest {
         byte[] publicKeyBytes = publicKey.getEncoded();
 
         System.out.println("---- Comparing EC public key from KeyPair vs calculated from private key ----");
+        System.out.println("EC private key: " + BaseUtils.bytesToHex(privKeyBytes));
         System.out.println("EC public key from Keypair: " + BaseUtils.bytesToHex(publicKeyBytes));
         System.out.println("EC public key from calculatePublicKey(): " + BaseUtils.bytesToHex(calculatedPublicKey));
         // The original and calculated public keys should be the same
