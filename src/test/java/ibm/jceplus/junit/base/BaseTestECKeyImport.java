@@ -102,7 +102,7 @@ public class BaseTestECKeyImport extends BaseTest {
     public void testECGenParamImportHardcoded() throws Exception {
 
         //final String methodName = "testECGenParamImportHardcoded";
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("EC", providerName);
+        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("EC", "SunEC");
 
         keyPairGen.initialize(256);
         KeyPair keyPair = keyPairGen.generateKeyPair();
@@ -111,7 +111,7 @@ public class BaseTestECKeyImport extends BaseTest {
 
         // Recreate private key from encoding.
         byte[] privKeyBytes = privateKey.getEncoded();
-        KeyFactory keyFactory = KeyFactory.getInstance("EC", providerName);
+        KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
         EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privKeyBytes);
         privateKey = keyFactory.generatePrivate(privateKeySpec);
 
