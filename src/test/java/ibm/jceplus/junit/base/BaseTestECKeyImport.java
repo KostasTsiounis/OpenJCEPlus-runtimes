@@ -111,7 +111,7 @@ public class BaseTestECKeyImport extends BaseTest {
 
         // Recreate private key from encoding.
         byte[] privKeyBytes = privateKey.getEncoded();
-        KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
+        KeyFactory keyFactory = KeyFactory.getInstance("EC", providerName);
         EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privKeyBytes);
         privateKey = keyFactory.generatePrivate(privateKeySpec);
 
