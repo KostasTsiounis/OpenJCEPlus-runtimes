@@ -61,6 +61,12 @@ public class BaseTestECKeyImportInterop extends BaseTestJunit5Interop {
         // Get public key bytes from original public key.
         byte[] publicKeyBytes = publicKey.getEncoded();
 
+        System.out.println("---- Comparing EC public key from KeyPair vs calculated from private key ----");
+        System.out.println("EC public key from Keypair from " + generateProviderName + ": "
+                + BaseUtils.bytesToHex(publicKeyBytes));
+        System.out.println("EC public key from calculatePublicKey() from " + importProviderName + ": "
+                + BaseUtils.bytesToHex(calculatedPublicKey));
+
         // The original and calculated public keys should be the same
         Assert.assertArrayEquals(calculatedPublicKey, publicKeyBytes);
     }
