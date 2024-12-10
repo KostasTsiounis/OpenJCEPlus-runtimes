@@ -96,8 +96,8 @@ final class XDHPrivateKeyImpl extends PKCS8Key implements XECPrivateKey, Seriali
         try {
             byte[] alteredEncoded = processEncodedPrivateKey(encoded); // Sets params, key, and algid, and alters encoded
             // to fit with GSKit and sets params
-            int encodingSize = CurveUtil.getDEREncodingSize(curve);
-            this.xecKey = XECKey.createPrivateKey(provider.getOCKContext(), alteredEncoded, encodingSize);
+            int curveSize = CurveUtil.getCurveSize(curve);
+            this.xecKey = XECKey.createPrivateKey(provider.getOCKContext(), alteredEncoded, curveSize);
             this.scalar = Optional.of(k);
         } catch (Exception exception) {
             InvalidKeyException ike = new InvalidKeyException("Failed to create XEC private key");
