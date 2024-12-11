@@ -799,7 +799,7 @@ final class NativeInterface {
     static public native byte[] ECKEY_getPublicKeyBytes(long ockContextId, long ecKeyId)
             throws OCKException;
 
-    static public native byte[] XECKEY_getPublicKeyBytes(long ockContextId, long xecKeyId, int curveNum)
+    static public native byte[] XECKEY_getPublicKeyBytes(long ockContextId, long xecKeyId)
             throws OCKException;
 
     static public native long ECKEY_createPKey(long ockContextId, long ecKeyId) throws OCKException;

@@ -12,17 +12,15 @@ import java.util.Arrays;
 
 public final class XECKey implements AsymmetricKey {
     private OCKContext ockContext;
-    private int curveNum;
     private long xecKeyId;
     private byte[] privateKeyBytes;
     private byte[] publicKeyBytes;
     private static final String badIdMsg = "XEC Key Identifier is not valid";
 
-    private XECKey(OCKContext ockContext, long xecKeyId, int curveNum) {
+    private XECKey(OCKContext ockContext, long xecKeyId) {
         //final String methodName = "XECKey(long, byte[], byte[]) ";
         this.ockContext = ockContext;
         this.xecKeyId = xecKeyId;
-        this.curveNum = curveNum;
     }
 
 
@@ -36,7 +34,7 @@ public final class XECKey implements AsymmetricKey {
         if (!validId(xecKeyId)) {
             throw new OCKException(badIdMsg);
         }
-        return new XECKey(ockContext, xecKeyId, curveNum);
+        return new XECKey(ockContext, xecKeyId);
     }
 
     public static byte[] computeECDHSecret(OCKContext ockContext, long genCtx, long pubId,
@@ -91,7 +89,7 @@ public final class XECKey implements AsymmetricKey {
             if (!validId(xecKeyId))
                 throw new OCKException(badIdMsg);
             this.publicKeyBytes = NativeInterface.XECKEY_getPublicKeyBytes(ockContext.getId(),
-                    xecKeyId, curveNum); // Returns DER encoded bytes
+                    xecKeyId); // Returns DER encoded bytes
         }
     }
 

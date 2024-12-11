@@ -377,10 +377,12 @@ int getPublicKey(ICC_CTX *ockCtx, JNIEnv *env, ICC_EVP_PKEY *key, unsigned char*
   size_t pub_size;
   int rc;
 
-  ICC_EVP_PKEY_get_raw_public_key(ockCtx, key, NULL, &pub_size);
-  rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, key, buffer, &pub_size); /* Add public key */
+  rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, key, NULL, &pub_size);
+  if (1 == rc) {
+    rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, key, buffer, &pub_size); /* Add public key */
+  }
 
-  return (rc == 1) ? rc : -1;
+  return rc;
 }
 
 // helper fuction for XECKEY_generate
@@ -1750,7 +1752,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterfa
  */
 
 JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterface_XECKEY_1getPublicKeyBytes
-  (JNIEnv *env, jclass thisObj, jlong ockContextId, jlong xecKeyId, jint curveNum)
+  (JNIEnv *env, jclass thisObj, jlong ockContextId, jlong xecKeyId)
 {
   ICC_CTX *       ockCtx = (ICC_CTX *)((intptr_t)ockContextId);
   ICC_EVP_PKEY *  ockEVPKey = (ICC_EVP_PKEY *)xecKeyId;
@@ -1774,14 +1776,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterfa
   #endif
       throwOCKException(env, 0, "NULL from GetPrimitiveArrayCritical");
     } else {
-      rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, keyBytesNative, &size);
-
-      if (NID_ffdh == getOption(curveNum)) {
-        rc = getDERPublicKey(ockCtx, env, ockEVPKey, keyBytesNative);
-      } else {
-        rc = getPublicKey(ockCtx, env, ockEVPKey, keyBytesNative);
-      }
-
+      rc = getPublicKey(ockCtx, env, ockEVPKey, keyBytesNative);
       if (0 == rc) {
         throwOCKException(env, 0, "Getting public key failed");
       }
