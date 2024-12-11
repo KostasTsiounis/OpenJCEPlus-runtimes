@@ -11,10 +11,6 @@ package com.ibm.crypto.plus.provider.ock;
 import java.util.Arrays;
 
 public final class XECKey implements AsymmetricKey {
-    // The following is a special byte[] instance to indicate that the
-    // private/public key bytes are available but not yet obtained.
-    //
-    static final byte[] unobtainedKeyBytes = new byte[0];
     private OCKContext ockContext;
     private long xecKeyId;
     private byte[] privateKeyBytes;
@@ -30,33 +26,24 @@ public final class XECKey implements AsymmetricKey {
         }
     };
 
-    private XECKey(OCKContext ockContext, long xecKeyId, byte[] privateKeyBytes,
-            byte[] publicKeyBytes) {
+    private XECKey(OCKContext ockContext, long xecKeyId) {
         //final String methodName = "XECKey(long, byte[], byte[]) ";
         this.ockContext = ockContext;
         this.xecKeyId = xecKeyId;
-        this.privateKeyBytes = privateKeyBytes;
-        this.publicKeyBytes = publicKeyBytes;
     }
 
 
     public static XECKey generateKeyPair(OCKContext ockContext, int curveNum, int pub_size)
             throws OCKException {
         //final String methodName = "generateKeyPair(NamedParameterSpec.CURVE) ";
-        if (ockContext == null)
+        if (ockContext == null) {
             throw new IllegalArgumentException("The context parameter is null");
-
-        FastJNIBuffer buffer = XECKey.buffer.get();
-
-        long xecKeyId = NativeInterface.XECKEY_generate(ockContext.getId(), curveNum,
-                buffer.pointer());
-        if (!validId(xecKeyId))
+        }
+        long xecKeyId = NativeInterface.XECKEY_generate(ockContext.getId(), curveNum);
+        if (!validId(xecKeyId)) {
             throw new OCKException(badIdMsg);
-
-        byte[] publicKeyBytes = new byte[pub_size];
-        buffer.get(0, publicKeyBytes, 0, pub_size);
-
-        return new XECKey(ockContext, xecKeyId, unobtainedKeyBytes, publicKeyBytes);
+        }
+        return new XECKey(ockContext, xecKeyId);
     }
 
     public static byte[] computeECDHSecret(OCKContext ockContext, long genCtx, long pubId,
@@ -85,7 +72,7 @@ public final class XECKey implements AsymmetricKey {
         // to getPrivateKeyBytes at the same time, we only want to call the
         // native code one time.
         //
-        if (privateKeyBytes == unobtainedKeyBytes) {
+        if (null == privateKeyBytes) {
             if (!validId(xecKeyId))
                 throw new OCKException(badIdMsg);
             this.privateKeyBytes = NativeInterface.XECKEY_getPrivateKeyBytes(ockContext.getId(),
@@ -96,17 +83,30 @@ public final class XECKey implements AsymmetricKey {
     @Override
     public byte[] getPrivateKeyBytes() throws OCKException {
         //final String methodName = "getPrivateKeyBytes()";
-        if (privateKeyBytes == unobtainedKeyBytes)
+        if (null == privateKeyBytes) {
             obtainPrivateKeyBytes();
+        }
         return (privateKeyBytes == null) ? null : privateKeyBytes.clone();
+    }
+
+    private synchronized void obtainPublicKeyBytes() throws OCKException {
+        // Leave this duplicate check in here. If two threads are both trying
+        // to getPrivateKeyBytes at the same time, we only want to call the
+        // native code one time.
+        //
+        if (null == publicKeyBytes) {
+            if (!validId(xecKeyId))
+                throw new OCKException(badIdMsg);
+            this.publicKeyBytes = NativeInterface.XECKEY_getPublicKeyBytes(ockContext.getId(),
+                    xecKeyId); // Returns DER encoded bytes
+        }
     }
 
     @Override
     public byte[] getPublicKeyBytes() throws OCKException {
         //final String methodName = "getPublickeyBytes()";
-        if (publicKeyBytes == unobtainedKeyBytes) {
-            throw new OCKException(
-                    "Public key should always be loaded on creation. Reaching this state means this object was initialized without a public key...");
+        if (null == publicKeyBytes) {
+            obtainPublicKeyBytes();
         }
         return (publicKeyBytes == null) ? null : publicKeyBytes.clone();
     }
@@ -116,7 +116,7 @@ public final class XECKey implements AsymmetricKey {
         //final String methodName = "finalize ";
         //OCKDebug.Msg(debPrefix, methodName,  "ecKeyId :" + ecKeyId + " pkeyId=" + pkeyId);
         try {
-            if ((privateKeyBytes != null) && (privateKeyBytes != unobtainedKeyBytes)) {
+            if (privateKeyBytes != null) {
                 Arrays.fill(privateKeyBytes, (byte) 0x00);
             }
 
@@ -132,23 +132,17 @@ public final class XECKey implements AsymmetricKey {
     public synchronized static XECKey createPrivateKey(OCKContext ockContext,
             byte[] privateKeyBytes, int priv_size) throws OCKException {
         //final String methodName = "createPrivateKey";
-        if (ockContext == null)
+        if (ockContext == null) {
             throw new IllegalArgumentException("context is null");
-        if (privateKeyBytes == null)
+        }
+        if (privateKeyBytes == null) {
             throw new IllegalArgumentException("key bytes is null");
-
-        FastJNIBuffer buffer = XECKey.buffer.get();
-
-        long xecKeyId = NativeInterface.XECKEY_createPrivateKey(ockContext.getId(), privateKeyBytes,
-                buffer.pointer());
-        if (!validId(xecKeyId))
+        }
+        long xecKeyId = NativeInterface.XECKEY_createPrivateKey(ockContext.getId(), privateKeyBytes);
+        if (!validId(xecKeyId)) {
             throw new OCKException(badIdMsg);
-
-        // buffer now contains public key
-        byte[] publicKeyBytes = new byte[priv_size];
-        buffer.get(0, publicKeyBytes, 0, priv_size);
-
-        return new XECKey(ockContext, xecKeyId, privateKeyBytes.clone(), publicKeyBytes);
+        }
+        return new XECKey(ockContext, xecKeyId);
     }
 
     public static XECKey createPublicKey(OCKContext ockContext, byte[] publicKeyBytes)
@@ -160,7 +154,10 @@ public final class XECKey implements AsymmetricKey {
             throw new IllegalArgumentException("key bytes is null");
 
         long xecKeyId = NativeInterface.XECKEY_createPublicKey(ockContext.getId(), publicKeyBytes);
-        return new XECKey(ockContext, xecKeyId, null, publicKeyBytes.clone());
+        if (!validId(xecKeyId)) {
+            throw new OCKException(badIdMsg);
+        }
+        return new XECKey(ockContext, xecKeyId);
     }
 
     public String getAlgorithm() {

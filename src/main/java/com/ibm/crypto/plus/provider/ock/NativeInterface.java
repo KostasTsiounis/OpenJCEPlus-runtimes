@@ -764,7 +764,7 @@ final class NativeInterface {
     static public native long ECKEY_generate(long ockContextId, String curveOid)
             throws OCKException;
 
-    static public native long XECKEY_generate(long ockContextId, int option, long bufferPtr)
+    static public native long XECKEY_generate(long ockContextId, int option)
             throws OCKException;
 
     static public native byte[] ECKEY_generateParameters(long ockContextId, int numBits)
@@ -779,8 +779,8 @@ final class NativeInterface {
     static public native long ECKEY_createPrivateKey(long ockContextId, byte[] privateKeyBytes)
             throws OCKException;
 
-    static public native long XECKEY_createPrivateKey(long ockContextId, byte[] privateKeyBytes,
-            long bufferPtr) throws OCKException;
+    static public native long XECKEY_createPrivateKey(long ockContextId, byte[] privateKeyBytes)
+            throws OCKException;
 
     static public native long ECKEY_createPublicKey(long ockContextId, byte[] publicKeyBytes,
             byte[] parameterBytes) throws OCKException;

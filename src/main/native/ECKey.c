@@ -1764,9 +1764,15 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterfa
   unsigned char * keyBytesNative = NULL;
   jbyteArray      keyBytes = NULL;
   size_t          size;
-  jboolean        isCopy = 0;
+  jboolean        isCopy = JNI_FALSE;
+  int             rc = 0;
 
-  ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, NULL, &size);
+  rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, NULL, &size);
+  if (0 == rc) {
+    throwOCKException(env, 0, "ICC_EVP_PKEY_get_raw_public_key failed");
+    return NULL;
+  }
+
   keyBytes = (*env)->NewByteArray(env, size);
   if(keyBytes == NULL ) {
 #ifdef DEBUG_EC_DETAIL
@@ -1774,22 +1780,29 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterfa
 #endif
     throwOCKException(env, 0, "NewByteArray failed");
   } else {
-    keyBytesNative = (unsigned char*)((*env)->GetPrimitiveArrayCritical(env, keyBytes, &isCopy));
+    keyBytesNative = (unsigned char *)((*env)->GetPrimitiveArrayCritical(env, keyBytes, &isCopy));
     if( keyBytesNative == NULL ) {
   #ifdef DEBUG_EC_DETAIL
       if (debug) gslogMessage("DETAIL_EC FAILURE keyBytesNative");
   #endif
       throwOCKException(env, 0, "NULL from GetPrimitiveArrayCritical");
     } else {
-      if(keyBytesNative != NULL) {
-        ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, keyBytesNative, &size);
-        (*env)->ReleasePrimitiveArrayCritical(env, keyBytes, keyBytesNative, 0);
-      }
-      if( (keyBytes != NULL) ) {
-        (*env)->DeleteLocalRef(env, keyBytes);
+      rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, keyBytesNative, &size);
+      if (0 == rc) {
+        throwOCKException(env, 0, "ICC_EVP_PKEY_get_raw_public_key failed");
       }
     }
   }
+
+  if (NULL != keyBytesNative) {
+    (*env)->ReleasePrimitiveArrayCritical(env, keyBytes, keyBytesNative, 0);
+  }
+
+  if ((NULL != keyBytes) && (0 == rc)) {
+    (*env)->DeleteLocalRef(env, keyBytes);
+    keyBytes = NULL;
+  }
+  
   return keyBytes;
 }
 
