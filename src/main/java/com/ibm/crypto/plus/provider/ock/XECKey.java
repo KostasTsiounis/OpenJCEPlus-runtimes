@@ -12,24 +12,17 @@ import java.util.Arrays;
 
 public final class XECKey implements AsymmetricKey {
     private OCKContext ockContext;
+    private int curveNum;
     private long xecKeyId;
     private byte[] privateKeyBytes;
     private byte[] publicKeyBytes;
     private static final String badIdMsg = "XEC Key Identifier is not valid";
-    private static final int FastJNIBufferSize = 3000;
 
-    // Buffer to pass XDH data from/to native efficiently
-    private static final ThreadLocal<FastJNIBuffer> buffer = new ThreadLocal<FastJNIBuffer>() {
-        @Override
-        protected FastJNIBuffer initialValue() {
-            return FastJNIBuffer.create(FastJNIBufferSize);
-        }
-    };
-
-    private XECKey(OCKContext ockContext, long xecKeyId) {
+    private XECKey(OCKContext ockContext, long xecKeyId, int curveNum) {
         //final String methodName = "XECKey(long, byte[], byte[]) ";
         this.ockContext = ockContext;
         this.xecKeyId = xecKeyId;
+        this.curveNum = curveNum;
     }
 
 
@@ -43,7 +36,7 @@ public final class XECKey implements AsymmetricKey {
         if (!validId(xecKeyId)) {
             throw new OCKException(badIdMsg);
         }
-        return new XECKey(ockContext, xecKeyId);
+        return new XECKey(ockContext, xecKeyId, curveNum);
     }
 
     public static byte[] computeECDHSecret(OCKContext ockContext, long genCtx, long pubId,
@@ -98,7 +91,7 @@ public final class XECKey implements AsymmetricKey {
             if (!validId(xecKeyId))
                 throw new OCKException(badIdMsg);
             this.publicKeyBytes = NativeInterface.XECKEY_getPublicKeyBytes(ockContext.getId(),
-                    xecKeyId); // Returns DER encoded bytes
+                    xecKeyId, curveNum); // Returns DER encoded bytes
         }
     }
 
