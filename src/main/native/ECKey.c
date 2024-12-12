@@ -1759,7 +1759,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_crypto_plus_provider_ock_NativeInterfa
 
   rc = ICC_EVP_PKEY_get_raw_public_key(ockCtx, ockEVPKey, NULL, &size);
   if (0 == rc) {
-    throwOCKException(env, 0, "ICC_EVP_PKEY_get_raw_public_key failed");
+    throwOCKException(env, 0, "ICC_EVP_PKEY_get_raw_public_key failed to get size");
     return NULL;
   }
 
