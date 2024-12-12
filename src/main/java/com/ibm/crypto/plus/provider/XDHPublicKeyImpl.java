@@ -89,6 +89,7 @@ final class XDHPublicKeyImpl extends X509Key implements XECPublicKey, Destroyabl
             this.algid = CurveUtil.getAlgId(curve);
             setFieldsFromXeckey();
         } catch (Exception exception) {
+            exception.printStackTrace();
             InvalidKeyException ike = new InvalidKeyException("Failed to create XEC public key");
             provider.setOCKExceptionCause(ike, exception);
             throw ike;
