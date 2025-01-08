@@ -15,10 +15,10 @@ import java.security.PublicKey;
 import java.security.interfaces.XECPrivateKey;
 import java.security.interfaces.XECPublicKey;
 import java.security.spec.NamedParameterSpec;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sun.security.util.InternalPrivateKey;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class BaseTestXDHKeyPairGenerator extends BaseTestJunit5 {
 
@@ -100,7 +100,7 @@ public class BaseTestXDHKeyPairGenerator extends BaseTestJunit5 {
         System.out.println("---- Comparing XDH public key from KeyPair vs calculated from private key ----");
         System.out.println("XDH public key from Keypair: " + BaseUtils.bytesToHex(originalEncoded));
         System.out.println("XDH public key from calculatePublicKey(): " + BaseUtils.bytesToHex(calculatedEncoded));
-        Assert.assertArrayEquals(originalEncoded, calculatedEncoded);
+        assertArrayEquals(originalEncoded, calculatedEncoded);
     }
 
     @Test

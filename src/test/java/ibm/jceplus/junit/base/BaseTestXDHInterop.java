@@ -19,9 +19,9 @@ import java.security.spec.NamedParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import sun.security.util.InternalPrivateKey;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class BaseTestXDHInterop extends BaseTestJunit5Interop {
 
@@ -45,7 +45,6 @@ public class BaseTestXDHInterop extends BaseTestJunit5Interop {
     public void doCreateKeyPairXDHGenParamImportCalculatePublic(String generateProviderName,
             String importProviderName) throws Exception {
 
-        //final String methodName = "testECGenParamImportHardcoded";
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("XDH", generateProviderName);
 
         keyPairGen.initialize(255);
@@ -72,7 +71,7 @@ public class BaseTestXDHInterop extends BaseTestJunit5Interop {
                 + BaseUtils.bytesToHex(calculatedPublicKey));
 
         // The original and calculated public keys should be the same
-        Assert.assertArrayEquals(calculatedPublicKey, publicKeyBytes);
+        assertArrayEquals(calculatedPublicKey, publicKeyBytes);
     }
 
     @Test

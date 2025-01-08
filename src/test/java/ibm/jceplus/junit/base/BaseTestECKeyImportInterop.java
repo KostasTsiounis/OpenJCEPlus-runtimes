@@ -23,10 +23,10 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import sun.security.util.InternalPrivateKey;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class BaseTestECKeyImportInterop extends BaseTestJunit5Interop {
 
@@ -41,7 +41,6 @@ public class BaseTestECKeyImportInterop extends BaseTestJunit5Interop {
     public void doCreateKeyPairECGenParamImportCalculatePublic(String generateProviderName,
             String importProviderName) throws Exception {
 
-        //final String methodName = "testECGenParamImportHardcoded";
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("EC", generateProviderName);
 
         keyPairGen.initialize(256);
@@ -68,7 +67,7 @@ public class BaseTestECKeyImportInterop extends BaseTestJunit5Interop {
                 + BaseUtils.bytesToHex(calculatedPublicKey));
 
         // The original and calculated public keys should be the same
-        Assert.assertArrayEquals(calculatedPublicKey, publicKeyBytes);
+        assertArrayEquals(calculatedPublicKey, publicKeyBytes);
     }
 
     @Test

@@ -20,11 +20,11 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sun.security.util.InternalPrivateKey;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class BaseTestECKeyPairGenerator extends BaseTestJunit5 {
 
@@ -119,7 +119,7 @@ public class BaseTestECKeyPairGenerator extends BaseTestJunit5 {
         System.out.println("---- Comparing EC public key from KeyPair vs calculated from private key ----");
         System.out.println("EC public key from Keypair: " + BaseUtils.bytesToHex(originalEncoded));
         System.out.println("EC public key from calculatePublicKey(): " + BaseUtils.bytesToHex(calculatedEncoded));
-        Assert.assertArrayEquals(originalEncoded, calculatedEncoded);
+        assertArrayEquals(originalEncoded, calculatedEncoded);
     }
 
     @Test
